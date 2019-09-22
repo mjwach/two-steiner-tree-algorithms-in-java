@@ -1,0 +1,2 @@
+# two-steiner-tree-algorithms-in-java
+Two algorithms in Java for building Steiner trees:  one that accepts a list of points in the Euclidean plane as coordinate pairs and emits a graph representing a Steiner tree efficiently connecting them, and one that accepts an undirected, weighted graph and a list of leaf vertices and marks within that graph the edges of a Steiner subgraph that efficiently connects the specified leaf vertices.
