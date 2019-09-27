@@ -1,0 +1,4 @@
+Copyright (c) 2019 mjwach
+
+The source code and other files in this project (with the exception of files in the project root directory representing aspects of third-party libraries) are published under and subject to the terms of the Boost license reproduced in LICENSE.txt.  The third-party libraries are subject to the terms of their own licenses, which may be found in this directory.
+
