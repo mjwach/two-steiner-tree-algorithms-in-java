@@ -27,6 +27,15 @@ public class EdgeArraysGraph implements Graph, Iterable<EdgeArraysGraph.Vertex>
 		Edge act(Vertex end0, Vertex end1);
 	}
 	
+	public static final EdgeFactory defaultEdgeFactory = new EdgeFactory()
+	{
+		@Override
+		public Edge act(Vertex end0, Vertex end1)
+		{
+			return new EuclideanEdge((EuclideanVertex) end0, (EuclideanVertex) end1);
+		}
+	};
+	
 	public static interface ActionOnVertexOrEdge
 	{
 		void perform(Vertex vertex);
@@ -39,16 +48,7 @@ public class EdgeArraysGraph implements Graph, Iterable<EdgeArraysGraph.Vertex>
 		public final ArrayList<Edge> edges;
 		private int mark;
 		
-		private static final EdgeFactory defaultEdgeFactory = new EdgeFactory()
-		{
-			@Override
-			public Edge act(Vertex end0, Vertex end1)
-			{
-				return new EuclideanEdge((EuclideanVertex) end0, (EuclideanVertex) end1);
-			}
-		};
-		
-		private Vertex(int index)
+		protected Vertex(int index)
 		{
 			this.index = index;
 			edges = new ArrayList<>();
@@ -157,14 +157,41 @@ public class EdgeArraysGraph implements Graph, Iterable<EdgeArraysGraph.Vertex>
 			edges.clear();
 		}
 
-		public void clearConnectedSubgraphMark(int markIndex)
+		@Override
+		public void clearMarkFromVerticesInConnectedSubgraph(int markIndex)
 		{
 			if (readMark(markIndex))
 			{
 				clearMark(markIndex);
 				for (Edge edge: edges)
-					edge.getDestination(this).clearConnectedSubgraphMark(markIndex);
+					edge.getDestination(this).clearMarkFromVerticesInConnectedSubgraph(markIndex);
 			}
+		}
+		
+		@Override
+		public void clearMarkFromVerticesAndEdgesInConnectedSubgraph(int markIndex)
+		{
+			if (readMark(markIndex))
+			{
+				clearMark(markIndex);
+				for (Edge edge: edges)
+					if (edge.readMark(markIndex))
+					{
+						edge.clearMarkInBothDirections(markIndex);
+						edge.getDestination(this).clearMarkFromVerticesAndEdgesInConnectedSubgraph(markIndex);
+					}
+			}
+		}
+		
+		@Override
+		public void clearMarkFromEdgesInConnectedSubgraph(int markIndex)
+		{
+			for (Edge edge: edges)
+				if (edge.readMark(markIndex))
+				{
+					edge.clearMarkInBothDirections(markIndex);
+					edge.getDestination(this).clearMarkFromEdgesInConnectedSubgraph(markIndex);
+				}
 		}
 
 		public EdgeArraysGraph buildShortCutsGraph(InterestEvaluation interestEvaluation, MarkFilter markFilter, int graphwideVertexCount, Sleeve<ShortcutGraphVertex[]> oldVertexToNewVertexMap_out)
@@ -441,26 +468,26 @@ public class EdgeArraysGraph implements Graph, Iterable<EdgeArraysGraph.Vertex>
 
 		public void setMarkFullyInSelfAndEnds(int markIndex)
 		{
-			setMarkFully(markIndex);
+			setMarkInBothDirections(markIndex);
 			end0.setMark(markIndex);
 			end1.setMark(markIndex);
 		}
 
 		public void clearMarkFullyInSelfAndEnds(int markIndex)
 		{
-			clearMarkFully(markIndex);
+			clearMarkInBothDirections(markIndex);
 			end0.clearMark(markIndex);
 			end1.clearMark(markIndex);
 		}
 
 		@Override
-		public void setMarkFully(int markIndex)
+		public void setMarkInBothDirections(int markIndex)
 		{
 			mark |= 1 << markIndex;
 		}
 		
 		@Override
-		public void clearMarkFully(int markIndex)
+		public void clearMarkInBothDirections(int markIndex)
 		{
 			clearMark(markIndex);
 		}
@@ -491,6 +518,12 @@ public class EdgeArraysGraph implements Graph, Iterable<EdgeArraysGraph.Vertex>
 		public GraphVertex getEnd1()
 		{
 			return end1;
+		}
+		
+		@Override
+		public GraphVertex getEnd(GraphVertex otherEnd)
+		{
+			return otherEnd == end0 ? end1 : end0;
 		}
 		
 		@Override
@@ -584,6 +617,11 @@ public class EdgeArraysGraph implements Graph, Iterable<EdgeArraysGraph.Vertex>
 		return vertices.get(index);
 	}
 	
+	public Vertex getEdgeArrayVertex(int index)
+	{
+		return vertices.get(index);
+	}
+	
 	public void addVertex(Vertex vertex)
 	{
 		vertices.add(vertex);
@@ -624,10 +662,7 @@ public class EdgeArraysGraph implements Graph, Iterable<EdgeArraysGraph.Vertex>
 			if (sets.find(i1) != sets.find(i2))
 			{
 				sets.union(i1, i2);
-
-				edge.setMarkFully(markIndex);
-				edge.end0.setMark(markIndex);
-				edge.end1.setMark(markIndex);
+				edge.setMarkFullyInSelfAndEnds(markIndex);
 				
 				if (++edgeCount == vertices.size() - 1)
 					break;
@@ -963,7 +998,7 @@ public class EdgeArraysGraph implements Graph, Iterable<EdgeArraysGraph.Vertex>
 							if (breakingNewGround && (edgeMark || vertex.readMark(markIndex)))
 								cycleEncountered = true;
 							
-							edge.setMarkFully(markIndex);
+							edge.setMarkInBothDirections(markIndex);
 							vertex.setMark(markIndex);
 						}
 					
@@ -1419,7 +1454,7 @@ public class EdgeArraysGraph implements Graph, Iterable<EdgeArraysGraph.Vertex>
 				else if (rangeInEdgesInclusive > 1)
 				{
 					actOnVerticesWithinRange_withMarking(action, location, rangeInEdgesInclusive, workingMarkIndex);
-					location.clearConnectedSubgraphMark(workingMarkIndex);
+					location.clearMarkFromVerticesInConnectedSubgraph(workingMarkIndex);
 				}
 			}
 

@@ -166,16 +166,44 @@ public class DCELGraph implements Graph
 								buffer.offer(nextEdge.destination);
 				}
 		}
-
-		public void removeMarks(int markIndex)
+		
+		@Override
+		public void clearMarkFromVerticesInConnectedSubgraph(int markIndex)
 		{
 			if (readMark(markIndex))
 			{
 				clearMark(markIndex);
 				
 				for (Edge nextEdge = edge, flagEdge = null; nextEdge != edge || nextEdge != flagEdge; nextEdge = nextEdge.leftNeighbor(), flagEdge = nextEdge)
-					nextEdge.destination.removeMarks(markIndex);
+					nextEdge.destination.clearMarkFromVerticesInConnectedSubgraph(markIndex);
 			}
+		}
+		
+		@Override
+		public void clearMarkFromVerticesAndEdgesInConnectedSubgraph(int markIndex)
+		{
+			if (readMark(markIndex))
+			{
+				clearMark(markIndex);
+				
+				for (Edge nextEdge = edge, flagEdge = null; nextEdge != edge || nextEdge != flagEdge; nextEdge = nextEdge.leftNeighbor(), flagEdge = nextEdge)
+					if (nextEdge.readMark(markIndex))
+					{
+						nextEdge.clearMarkInBothDirections(markIndex);
+						nextEdge.destination.clearMarkFromVerticesAndEdgesInConnectedSubgraph(markIndex);
+					}
+			}
+		}
+		
+		@Override
+		public void clearMarkFromEdgesInConnectedSubgraph(int markIndex)
+		{
+			for (Edge nextEdge = edge, flagEdge = null; nextEdge != edge || nextEdge != flagEdge; nextEdge = nextEdge.leftNeighbor(), flagEdge = nextEdge)
+				if (nextEdge.readMark(markIndex))
+				{
+					nextEdge.clearMarkInBothDirections(markIndex);
+					nextEdge.destination.clearMarkFromEdgesInConnectedSubgraph(markIndex);
+				}
 		}
 		
 		@Override
@@ -288,14 +316,14 @@ public class DCELGraph implements Graph
 		}
 		
 		@Override
-		public void setMarkFully(int markIndex)
+		public void setMarkInBothDirections(int markIndex)
 		{
 			setMark(markIndex);
 			opposite.setMark(markIndex);
 		}
 		
 		@Override
-		public void clearMarkFully(int markIndex)
+		public void clearMarkInBothDirections(int markIndex)
 		{
 			clearMark(markIndex);
 			opposite.clearMark(markIndex);
@@ -433,6 +461,12 @@ public class DCELGraph implements Graph
 		public GraphVertex getEnd1()
 		{
 			return destination;
+		}
+		
+		@Override
+		public GraphVertex getEnd(GraphVertex otherEnd)
+		{
+			return otherEnd == getEnd1() ? getEnd0() : getEnd1();
 		}
 		
 		@Override
@@ -1418,7 +1452,7 @@ public class DCELGraph implements Graph
 			for (int i = 0; i < potentialEdgesForSplicing.size(); i++)
 				potentialEdgesForSplicing.get(i).setMarks(markIndex, false);
 			
-			triangulationVertex.removeMarks(markIndex);
+			triangulationVertex.clearMarkFromVerticesInConnectedSubgraph(markIndex);
 			
 			// find the best old edge for the new vertex to be connected to (via one new Steiner vertex that'll split the old edge)--
 			// that is, the one that makes for the shortest graph--and remember the result of that best addition, so that it can be

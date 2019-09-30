@@ -36,6 +36,11 @@ public class PlaneVector implements EuclideanVector
 		return new PlaneVector(this.x - x, this.y - y);
 	}
 	
+	public PlaneVector times(float multiplicand)
+	{
+		return new PlaneVector(x * multiplicand, y * multiplicand);
+	}
+	
 	public PlaneVector averagedWith(PlaneVector peer)
 	{
 		return new PlaneVector((x + peer.x) * .5f, (y + peer.y) * .5f);
@@ -107,6 +112,14 @@ public class PlaneVector implements EuclideanVector
 	public static float crossZ(DCELGraph.Vertex v1, DCELGraph.Vertex v2, DCELGraph.Vertex v3) // == (va - vc) x (vb - vc) where (a, b, c) is one of {(1, 2, 3), (2, 3, 1), (3, 1, 2)}
 	{
 		return (v1.x - v3.x) * (v2.y - v3.y) - (v2.x - v3.x) * (v1.y - v3.y);
+	}
+
+	public PlaneVector rotatedBy(float angle)
+	{
+		float sine = (float) Math.sin(angle);
+		float cosine = (float) Math.cos(angle);
+		
+		return new PlaneVector(x * cosine - y * sine, x * sine + y * cosine);
 	}
 	
 	public static void getSteinerPoint(DCELGraph.Vertex v0, DCELGraph.Vertex v1, DCELGraph.Vertex v2, DCELGraph.Vertex repository)

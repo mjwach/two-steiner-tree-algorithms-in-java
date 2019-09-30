@@ -170,7 +170,7 @@ public class SubgraphSteinerVertexCache // this class handles some of the tasks 
 
 		public void clearMarks(int markIndex)
 		{
-			v.clearConnectedSubgraphMark(markIndex);
+			v.clearMarkFromVerticesInConnectedSubgraph(markIndex);
 		}
 	}
 	
