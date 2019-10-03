@@ -62,7 +62,7 @@ The markSteinerSubgraph() method also accepts a SteinerSubgraphOptions object co
 
 By default, this is not the case.  So, make sure to alter one of those values appropriately.  If your graph is small or its edges sparse, the Integer.MAX_VALUE option may be best.  If it's larger and you don't mind a bit of randomness (you can of course set the seed yourself), setting the random field may be best.  If you don't mind some potential loss in result quality, setting the maximal multiple-vertex jump depth to zero may be a good option.
 
-Otherwise, the default options should be at least decent in many situations.  Still, you are encouraged to play around with their values.  For a more thorough explanation of their meanings, see the long, rambling comment above EdgeArraysGraph.markSteinerSubgraph().
+Otherwise, the default options should be at least decent in many situations.  Still, you are encouraged to play around with their values.  For a more thorough explanation of their meanings, see the [long, rambling comment](src/com/github/mjwach/steiner_tree_algorithms/EdgeArraysGraph.java#L1057-L1202) above EdgeArraysGraph.markSteinerSubgraph().
 
 This algorithm is not optimized especially well for low memory usage.  On this author's machine, with the default JVM heap size and stack size, it tends to run into trouble (in the form of out-of-memory errors) at around 10,000 vertices and 30,000 edges per graph, though this will vary substantially from one set of inputs to another.  It could certainly be improved in this respect; extending those memory limits via JVM arguments would of course be a cheap workaround.
 
