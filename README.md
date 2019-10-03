@@ -20,7 +20,7 @@ The basic algorithm used here is a modification of an "Incremental Optimization 
 
 Degenerate edges (between input points that lie atop one another) are handled according to the caller's preference, as specified via the SteinerDuplicatePointPolicy parameter.  There are two choices:  Either collapse each set of equal input points into one output vertex, or turn EVERY input point into an output vertex no matter what, with only one vertex in each set of coincident ones being used to build the main tree, while the rest are hung upon that one via zero-length edges (which will still of course form a tree).
 
-A few numerical tuning parameters are optionally accepted, for improving the quality of the algorithm's result, the speed with which it runs, or (occasionally) both at once.  For a little more detail on these, see the [comment on DCELGraph.makeSteinerTreeAndDelaunayTriangulation()](https://github.com/mjwach/two-steiner-tree-algorithms-in-java/blob/640c48f8a52dbf5135d286297c7d4f579b229027/src/com/github/mjwach/steiner_tree_algorithms/DCELGraph.java#L858-L877).
+A few numerical tuning parameters are optionally accepted, for improving the quality of the algorithm's result, the speed with which it runs, or (occasionally) both at once.  For a little more detail on these, see the [comment on DCELGraph.makeSteinerTreeAndDelaunayTriangulation()](src/com/github/mjwach/steiner_tree_algorithms/DCELGraph.java#L858-L877).
 
 No rigorous analysis of the algorithm's performance is offered here.  It does an okay job I think!  If you give it a small-ish point set it should be quite fast.  It can work well for large inputs too, but is not really optimized for memory usage; very large input sets will cause stack overflow or heap overflow errors.
 
