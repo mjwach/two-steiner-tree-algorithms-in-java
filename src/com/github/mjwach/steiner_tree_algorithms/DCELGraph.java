@@ -2345,12 +2345,6 @@ public class DCELGraph implements Graph
 		return vertices[index].getLocation();
 	}
 	
-//	@Override
-//	public void markSteinerSubgraph(TIntArrayList terminals, int markIndex, InterruptionSignal interruptionSignal, SteinerSubgraphOptions options)
-//	{
-//		throw new UnsupportedOperationException();
-//	}
-	
 	@Override
 	public float getWeightOfMarkedTree(int markIndex)
 	{

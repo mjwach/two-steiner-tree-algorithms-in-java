@@ -1064,7 +1064,7 @@ public class EdgeArraysGraph implements Graph, Iterable<EdgeArraysGraph.Vertex>
 	 * 
 	 * Here the connection of a Steiner tree is done incrementally, with one terminal being added at a time to the growing Steiner tree.
 	 * 
-	 * The parameter markIndex selects the particular mark that will be left in the shape of the tree; this mark will also be used for scratch work during the algorithm.  It is
+	 * The parameter markIndex selects the particular mark that will be left in the shape of the tree(s); this mark will also be used for scratch work during the algorithm.  It is
 	 * expected that at the start of this call, no existing instances of this mark will exist in parts of the graph visited by the algorithm.  The natural way to ensure this, of
 	 * course, is to select some mark that isn't being used anywhere at all in the graph.
 	 * 
@@ -1259,7 +1259,7 @@ public class EdgeArraysGraph implements Graph, Iterable<EdgeArraysGraph.Vertex>
 				if (!terminal.mark)
 				{
 					TIntArrayList sortedOriginalTerminals = spreadMarksThroughTreeFromOnePointPuttingShortestEdgesFirst(terminal, paths);
-					markSteinerSubgraph_(sortedOriginalTerminals, markIndex, markIndex, options, paths, interruptionSignal);
+					markSteinerSubtree(sortedOriginalTerminals, markIndex, markIndex, options, paths, interruptionSignal);
 				}
 				if (interruptionSignal.isActive()) return;
 			}
@@ -2053,7 +2053,7 @@ public class EdgeArraysGraph implements Graph, Iterable<EdgeArraysGraph.Vertex>
 		}
 	}
 
-	private void markSteinerSubgraph_(TIntArrayList sortedConnectedTerminals, int markIndex, int workingMarkIndex, final SteinerSubgraphOptions options, final ShortestPathsTable paths, InterruptionSignal interruptionSignal) throws ShortestPathsSearchInterruption
+	private void markSteinerSubtree(TIntArrayList sortedConnectedTerminals, int markIndex, int workingMarkIndex, final SteinerSubgraphOptions options, final ShortestPathsTable paths, InterruptionSignal interruptionSignal) throws ShortestPathsSearchInterruption
 	{
 		SteinerSubgraphVertex subgraphRoot = new SteinerSubgraphVertex(vertices.get(sortedConnectedTerminals.get(0)), false);
 		
