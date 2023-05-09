@@ -22,15 +22,15 @@ public class PlanarTreeExample
 		
 		CalculatedSteinerTree graphs = DCELGraph.makeSteinerTreeAndDelaunayTriangulation(points, SteinerDuplicatePointPolicy.includeOnlyOneVertexPerLocation);
 		
-		if (Printing.produceMathematicaCode) System.out.println("{");
+		if (Printing.produceMathematicaCode) System.out.print("{");
 		
-		Printing.performOn(graphs.steinerTree, "Steiner tree", "Red");
+		Printing.performOn(graphs.steinerTree, "Steiner tree", "Magenta");
 		if (!Printing.produceMathematicaCode) System.out.println();
 
 		if (Printing.produceMathematicaCode) System.out.println(", ");
 		
 		Printing.performOn(graphs.delaunayTriangulation, "Delaunay triangulation", "Green");
 
-		if (Printing.produceMathematicaCode) System.out.println("}\n(* Paste the entire output of this program into Mathematica to see the graphs! *)");
+		if (Printing.produceMathematicaCode) System.out.println("(* Paste the entire output of this program into Mathematica to see the graphs!  Note that copying from the Eclipse console can add weird formatting - paste into a plain text editor first to strip that away! *)}");
 	}
 }

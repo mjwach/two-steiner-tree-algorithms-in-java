@@ -56,7 +56,8 @@ public class Subgraph2DExample
 		
 		graph.markSteinerSubgraph(terminals, steinerMarkIndex, NullInterruptionSignal.instance, options);
 		
-		Printing.performOn(graph, steinerMarkIndex, steinerMarkIndex + 1, "Steiner tree", "Red");
-		if (Printing.produceMathematicaCode) System.out.println("(* Paste the entire output of this program into Mathematica to see the graph! *)");
+		if (Printing.produceMathematicaCode) System.out.print("{");
+		Printing.performOn(graph, steinerMarkIndex, steinerMarkIndex + 1, "Steiner tree", "Magenta");
+		if (Printing.produceMathematicaCode) System.out.println("(* Paste the entire output of this program into Mathematica to see the graph!  Note that copying from the Eclipse console can add weird formatting - paste into a plain text editor first to strip that away! *)}");
 	}
 }

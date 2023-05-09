@@ -48,13 +48,13 @@ public class SubgraphManhattanDistanceExample
 	{
 		Printing.produceMathematicaCode = false;  // change this to true if you want
 		
-		if (Printing.produceMathematicaCode) System.out.println("{");
+		if (Printing.produceMathematicaCode) System.out.print("{");
 		
 		printGraph("Graph", true, "Green", EdgeArraysGraph.defaultEdgeFactory);
 		System.out.println(Printing.produceMathematicaCode ? "," : "");
-		printGraph("Steiner tree of graph (Euclidean metric)", false, "Magenta", EdgeArraysGraph.defaultEdgeFactory);
+		printGraph("Steiner tree of graph (Euclidean metric)", false, "Blue", EdgeArraysGraph.defaultEdgeFactory);
 		System.out.println(Printing.produceMathematicaCode ? "," : "");
-		printGraph("Steiner tree of graph (Manhattan metric)", false, "Red", new EdgeFactory()
+		printGraph("Steiner tree of graph (Manhattan metric)", false, "Magenta", new EdgeFactory()
 		{			
 			@Override
 			public Edge act(Vertex end0, Vertex end1)
@@ -63,8 +63,7 @@ public class SubgraphManhattanDistanceExample
 			}
 		});
 
-		if (Printing.produceMathematicaCode) System.out.println("}");
-		if (Printing.produceMathematicaCode) System.out.println("(* Paste the entire output of this program into Mathematica to see the graphs! *)");
+		if (Printing.produceMathematicaCode) System.out.println("(* Paste the entire output of this program into Mathematica to see the graphs!  Note that copying from the Eclipse console can add weird formatting - paste into a plain text editor first to strip that away! *)}");
 	}
 
 	private static void printGraph(String graphName, boolean drawGraphNotSteinerTree, String color, EdgeFactory edgeFactory)

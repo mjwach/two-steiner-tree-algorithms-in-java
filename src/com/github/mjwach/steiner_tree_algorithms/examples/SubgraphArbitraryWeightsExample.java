@@ -66,7 +66,7 @@ public class SubgraphArbitraryWeightsExample
 	{
 		Printing.produceMathematicaCode = false;  // change this to true if you want
 		
-		if (Printing.produceMathematicaCode) System.out.println("{");
+		if (Printing.produceMathematicaCode) System.out.print("{");
 	
 		printGraph("Steiner tree (where the main graph is a grid with trivial edge weights)", new WeightFunction()
 		{
@@ -116,8 +116,7 @@ public class SubgraphArbitraryWeightsExample
 			}
 		});
 
-		if (Printing.produceMathematicaCode) System.out.println("}");
-		if (Printing.produceMathematicaCode) System.out.println("(* Paste the entire output of this program into Mathematica to see the graphs! *)");
+		if (Printing.produceMathematicaCode) System.out.println("(* Paste the entire output of this program into Mathematica to see the graphs!  Note that copying from the Eclipse console can add weird formatting - paste into a plain text editor first to strip that away! *)}");
 	}
 
 	private static void printGraph(String graphName, WeightFunction weightFunction)
@@ -186,6 +185,6 @@ public class SubgraphArbitraryWeightsExample
 		
 		graph.markSteinerSubgraph(terminals, steinerMarkIndex, NullInterruptionSignal.instance, options);
 		
-		Printing.performOn(graph, steinerMarkIndex, steinerMarkIndex + 1, graphName, "Red");
+		Printing.performOn(graph, steinerMarkIndex, steinerMarkIndex + 1, graphName, "Magenta");
 	}
 }
