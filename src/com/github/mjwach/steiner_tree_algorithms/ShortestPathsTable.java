@@ -63,8 +63,9 @@ public class ShortestPathsTable
 	
 	public int getNextVertexOnShortestPath(int sourceIndex, int destinationIndex) throws ShortestPathsSearchInterruption
 	{
+		// next step from source to destination is the next-to-last step from destination to source, so:
 		int cellIndex = getCellIndex(destinationIndex, sourceIndex);
-		ensurePenultimateStepValueIsPresent(sourceIndex, cellIndex);		
+		ensurePenultimateStepValueIsPresent(destinationIndex, cellIndex);
 		return penultimateSteps[cellIndex];
 	}
 
@@ -125,12 +126,11 @@ public class ShortestPathsTable
 		
 		for (int i = 0; i < endpointsToInclude.size(); ++i)
 		{
-			int endpoint = endpointsToInclude.get(i);
+			int source = endpointsToInclude.get(i);
 			TIntArrayList list = new TIntArrayList();
-			
-			for (int start = getCellIndex(endpoint, 0), end = start + vertexCount, j = start + 1; j < end; ++j)
+
+			for (int start = getCellIndex(source, 0), end = start + vertexCount, j = start + 1; j < end; ++j)
 			{
-				int source = endpoint;
 				ensureSortedPeersValueIsPresent(source, j);
 				int destination = sortedPeers[j];
 				
